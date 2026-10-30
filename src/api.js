@@ -16,3 +16,8 @@ export async function request(method, path, body) {
     return { ok: false, data: null, message: "Can't reach the server. It may be starting up, so please wait a minute and try again." }
   }
 }
+
+// Fire-and-forget request that wakes a sleeping Render service. Never throws.
+export function warmUp() {
+  fetch(BASE_URL + '/api/health').catch(() => {})
+}

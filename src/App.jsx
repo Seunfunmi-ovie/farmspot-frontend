@@ -1,15 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './components/Header.jsx'
 import AuthScreen from './components/AuthScreen.jsx'
 import Dashboard from './components/Dashboard.jsx'
-import { request } from './api.js'
+import { request, warmUp } from './api.js'
 
 const KEY = 'farmspot-session'
+const PING_EVERY_MS = 10 * 60 * 1000
 
 export default function App() {
   const [session, setSession] = useState(() => {
     try { return JSON.parse(sessionStorage.getItem(KEY)) } catch { return null }
   })
+
+  // Wake the server as soon as the page opens, then keep it awake while the tab is open.
+  useEffect(() => {
+    warmUp()
+    const timer = setInterval(warmUp, PING_EVERY_MS)
+    return () => clearInterval(timer)
+  }, [])
 
   function signIn(s) {
     sessionStorage.setItem(KEY, JSON.stringify(s))
