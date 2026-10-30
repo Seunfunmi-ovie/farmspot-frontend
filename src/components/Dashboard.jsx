@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Notice from './Notice.jsx'
 import LoanCard from './LoanCard.jsx'
 import ApplyLoanPanel from './ApplyLoanPanel.jsx'
+import ProfilePanel from './ProfilePanel.jsx'
 import { request } from '../api.js'
 import { formatMoney } from '../format.js'
 
@@ -12,6 +13,7 @@ export default function Dashboard({ farmerId }) {
   const [error, setError] = useState(null)
   const [notice, setNotice] = useState(null)
   const [applying, setApplying] = useState(false)
+  const [editing, setEditing] = useState(false)
   const seen = useRef(null)
 
   const load = useCallback(async () => {
@@ -50,6 +52,12 @@ export default function Dashboard({ farmerId }) {
     load()
   }
 
+  function handleProfileDone(n) {
+    setNotice(n)
+    setEditing(false)
+    load()
+  }
+
   if (!data) {
     return error
       ? <><Notice notice={{ type: 'error', text: error }} /><button onClick={load} className="text-sm underline">Try again</button></>
@@ -60,7 +68,16 @@ export default function Dashboard({ farmerId }) {
 
   return (
     <div>
-      <h2 className="text-3xl mb-6">Hello, {data.fullName.split(' ')[0]}</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl">Hello, {data.fullName.split(' ')[0]}</h2>
+        {!editing && (
+          <button onClick={() => setEditing(true)} className="text-sm font-semibold text-field underline">
+            Edit profile
+          </button>
+        )}
+      </div>
+
+      {editing && <ProfilePanel farmerId={farmerId} onDone={handleProfileDone} onCancel={() => setEditing(false)} />}
 
       <div className="bg-field text-bg rounded px-8 py-7 mb-8">
         <div className="text-sm text-[#C7D4C5]">Account balance</div>
