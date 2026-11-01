@@ -31,7 +31,7 @@ export default function ApplyLoanPanel({ farmerId, onDone, onCancel }) {
   }
 
   return (
-    <form onSubmit={submit} className="bg-white border border-line rounded px-8 py-7 mb-6 flex flex-col gap-4">
+    <form onSubmit={submit} className="bg-white border border-line rounded-lg shadow-card px-8 py-7 mb-6 flex flex-col gap-4">
       <h3 className="text-lg">Apply for a loan</h3>
       <Notice notice={error} />
       <Field label="Amount you need">
@@ -41,7 +41,7 @@ export default function ApplyLoanPanel({ farmerId, onDone, onCancel }) {
         <select
           value={method}
           onChange={e => setMethod(e.target.value)}
-          className="text-[14.5px] px-3 py-2.5 border border-line rounded bg-[#FDFCF8] text-ink focus:outline-none focus:ring-2 focus:ring-gold"
+          className="text-[14.5px] px-3 py-2.5 border border-line rounded-md bg-paper text-ink focus:outline-none focus:ring-2 focus:ring-gold"
         >
           {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m.replace('_', ' ').toLowerCase()}</option>)}
         </select>

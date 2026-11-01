@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Field, { TextInput } from './Field.jsx'
 import SubmitButton from './SubmitButton.jsx'
 import Notice from './Notice.jsx'
+import { FieldBanner } from './Motifs.jsx'
 import { request } from '../api.js'
 
 const REGISTER_FIELDS = [
@@ -32,7 +33,12 @@ export default function AuthScreen({ onSignedIn }) {
     if (res.data?.farmerId == null) {
       return setNotice({ type: 'error', text: 'Signed in, but the server did not return your farmer id. Add farmerId to the login response.' })
     }
-    onSignedIn({ farmerId: res.data.farmerId, userName: login.userName })
+    onSignedIn({
+      farmerId: res.data.farmerId,
+      userName: login.userName,
+      role: res.data.role || 'FARMER',
+      token: res.data.token
+    })
   }
 
   async function handleRegister(e) {
@@ -57,10 +63,15 @@ export default function AuthScreen({ onSignedIn }) {
 
   return (
     <div className="max-w-lg mx-auto">
-      <h2 className="text-3xl mb-1">Welcome to FarmsPot</h2>
-      <p className="text-inksoft mb-8">Farm credit, simply managed.</p>
+      <div className="relative overflow-hidden rounded-lg shadow-card mb-6">
+        <FieldBanner className="block w-full h-52" />
+        <div className="absolute inset-0 px-8 py-7">
+          <h2 className="text-3xl text-bg">Welcome to FarmsPot</h2>
+          <p className="text-wheat mt-1 text-sm tracking-wide">Farm credit, simply managed.</p>
+        </div>
+      </div>
 
-      <div className="bg-white border border-line rounded px-8 py-7">
+      <div className="bg-white border border-line rounded-lg shadow-card px-8 py-7">
         <div className="flex gap-6 mb-6 border-b border-line">
           <button className={tab(mode === 'signin')} onClick={() => { setMode('signin'); setNotice(null) }}>Sign in</button>
           <button className={tab(mode === 'register')} onClick={() => { setMode('register'); setNotice(null) }}>Create account</button>

@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import Header from './components/Header.jsx'
 import AuthScreen from './components/AuthScreen.jsx'
 import Dashboard from './components/Dashboard.jsx'
-import { request, warmUp } from './api.js'
+import AdminDashboard from './components/admin/AdminDashboard.jsx'
+import { request, warmUp, SESSION_KEY } from './api.js'
 
-const KEY = 'farmspot-session'
+const KEY = SESSION_KEY
 const PING_EVERY_MS = 10 * 60 * 1000
 
 export default function App() {
@@ -30,11 +31,15 @@ export default function App() {
     setSession(null)
   }
 
+  const isAdmin = session?.role === 'ADMIN'
+
   return (
     <div className="min-h-screen">
-      <Header userName={session?.userName} onSignOut={signOut} />
-      <main className="max-w-3xl mx-auto px-6 py-10">
-        {session ? <Dashboard farmerId={session.farmerId} /> : <AuthScreen onSignedIn={signIn} />}
+      <Header userName={session?.userName} isAdmin={isAdmin} onSignOut={signOut} />
+      <main className={(isAdmin ? 'max-w-6xl' : 'max-w-3xl') + ' mx-auto px-6 py-10'}>
+        {!session && <AuthScreen onSignedIn={signIn} />}
+        {session && isAdmin && <AdminDashboard />}
+        {session && !isAdmin && <Dashboard farmerId={session.farmerId} />}
       </main>
     </div>
   )

@@ -1,26 +1,30 @@
-export default function Header({ userName, onSignOut }) {
+import { Logo } from './Motifs.jsx'
+
+export default function Header({ userName, isAdmin, onSignOut }) {
   return (
-    <header className="flex items-center justify-between px-6 md:px-10 py-5 bg-field text-bg">
-      <div className="flex items-center gap-3">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2 L12 22" stroke="#C9A332" strokeWidth="1.4" strokeLinecap="round" />
-          <path d="M12 5 Q9 6 8 8 Q10 8 12 7Z" fill="#C9A332" />
-          <path d="M12 5 Q15 6 16 8 Q14 8 12 7Z" fill="#C9A332" />
-          <path d="M12 9 Q9 10 8 12 Q10 12 12 11Z" fill="#C9A332" />
-          <path d="M12 9 Q15 10 16 12 Q14 12 12 11Z" fill="#C9A332" />
-          <path d="M12 13 Q9 14 8 16 Q10 16 12 15Z" fill="#C9A332" />
-          <path d="M12 13 Q15 14 16 16 Q14 16 12 15Z" fill="#C9A332" />
-        </svg>
-        <h1 className="text-xl font-semibold">FarmsPot</h1>
-      </div>
-      {userName && (
-        <div className="flex items-center gap-4 text-sm">
-          <span className="text-[#E7E2D0]">{userName}</span>
-          <button onClick={onSignOut} className="border border-white/30 rounded px-3 py-1.5 hover:bg-white/10">
-            Sign out
-          </button>
+    <header className="bg-bg border-b border-line">
+      <div className={(isAdmin ? 'max-w-6xl' : 'max-w-3xl') + ' mx-auto flex items-center justify-between px-6 py-4'}>
+        <div className="flex items-center gap-2.5 text-gold">
+          <Logo />
+          <h1 className="text-2xl font-semibold text-field-deep">FarmsPot</h1>
         </div>
-      )}
+        {userName && (
+          <div className="flex items-center gap-4 text-sm">
+            {isAdmin && (
+              <span className="bg-field text-wheat text-[11px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full">
+                Admin
+              </span>
+            )}
+            <span className="text-inksoft hidden sm:inline">{userName}</span>
+            <button
+              onClick={onSignOut}
+              className="border border-field/30 text-field-deep rounded-md px-3.5 py-1.5 hover:bg-field hover:text-bg transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
+        )}
+      </div>
     </header>
   )
 }

@@ -8,16 +8,21 @@ export default {
         sans: ['"Work Sans"', 'sans-serif']
       },
       colors: {
-        bg: '#F6F3EA',
-        ink: '#1C2A20',
-        inksoft: '#55645A',
-        field: { DEFAULT: '#2F4B3C', deep: '#1F3329' },
-        gold: '#C9A332',
-        soil: '#8A5A33',
-        sage: '#E8EBDF',
-        line: '#DAD4C2',
-        err: { DEFAULT: '#9C3B2E', bg: '#F7E9E6' },
-        ok: { bg: '#EAF0E6' }
+        bg: '#F5F1E6',
+        paper: '#FFFEFA',
+        ink: '#262A20',
+        inksoft: '#625F52',
+        field: { DEFAULT: '#3D4A2C', deep: '#2B351F' },
+        gold: '#A8864B',
+        wheat: '#DCC48C',
+        soil: '#7B5638',
+        sage: '#E9E8D8',
+        line: '#DED7C2',
+        err: { DEFAULT: '#9B3E2C', bg: '#F5E6DF' },
+        ok: { bg: '#E7EBD8' }
+      },
+      boxShadow: {
+        card: '0 1px 2px rgba(43,53,31,0.06), 0 6px 18px rgba(43,53,31,0.05)'
       }
     }
   },

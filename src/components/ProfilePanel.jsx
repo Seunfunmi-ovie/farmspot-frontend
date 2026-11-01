@@ -43,7 +43,7 @@ export default function ProfilePanel({ farmerId, onDone, onCancel }) {
   }
 
   return (
-    <form onSubmit={submit} className="bg-white border border-line rounded px-8 py-7 mb-6 flex flex-col gap-4">
+    <form onSubmit={submit} className="bg-white border border-line rounded-lg shadow-card px-8 py-7 mb-6 flex flex-col gap-4">
       <h3 className="text-lg">Edit your profile</h3>
       <p className="text-sm text-inksoft -mt-2">Only the fields you fill in will be changed.</p>
       <Notice notice={error} />

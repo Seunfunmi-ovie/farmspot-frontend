@@ -3,6 +3,7 @@ import Notice from './Notice.jsx'
 import LoanCard from './LoanCard.jsx'
 import ApplyLoanPanel from './ApplyLoanPanel.jsx'
 import ProfilePanel from './ProfilePanel.jsx'
+import { WheatField } from './Motifs.jsx'
 import { request } from '../api.js'
 import { formatMoney } from '../format.js'
 
@@ -79,9 +80,12 @@ export default function Dashboard({ farmerId }) {
 
       {editing && <ProfilePanel farmerId={farmerId} onDone={handleProfileDone} onCancel={() => setEditing(false)} />}
 
-      <div className="bg-field text-bg rounded px-8 py-7 mb-8">
-        <div className="text-sm text-[#C7D4C5]">Account balance</div>
-        <div className="font-serif text-4xl text-gold mt-1">{formatMoney(data.balance)}</div>
+      <div className="relative overflow-hidden bg-field text-bg rounded-lg shadow-card px-8 py-8 mb-8">
+        <WheatField className="absolute right-4 bottom-0 h-full text-wheat opacity-[0.16]" />
+        <div className="relative">
+          <div className="text-xs uppercase tracking-[0.16em] text-wheat/80">Account balance</div>
+          <div className="font-serif text-5xl text-wheat mt-2">{formatMoney(data.balance)}</div>
+        </div>
       </div>
 
       <Notice notice={notice} onClose={() => setNotice(null)} />
@@ -89,7 +93,7 @@ export default function Dashboard({ farmerId }) {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl">Your loans</h3>
         {!applying && (
-          <button onClick={() => setApplying(true)} className="bg-field hover:bg-field-deep text-bg font-semibold text-sm px-4 py-2.5 rounded">
+          <button onClick={() => setApplying(true)} className="bg-field hover:bg-field-deep text-bg font-semibold text-sm px-4 py-2.5 rounded-md">
             Apply for a loan
           </button>
         )}
