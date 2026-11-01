@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Notice from '../Notice.jsx'
 import { TextInput } from '../Field.jsx'
+import { Avatar } from '../Motifs.jsx'
 import { request } from '../../api.js'
 import { formatMoney, formatDate } from '../../format.js'
 
@@ -42,11 +43,8 @@ export default function AdminFarmers({ onChanged }) {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-80 max-w-full [&>input]:w-full">
-          <TextInput placeholder="Search name, username, email or phone" value={search} onChange={e => setSearch(e.target.value)} />
-        </div>
-        <button onClick={load} className="text-sm text-inksoft underline">Refresh</button>
+      <div className="mb-5 [&>input]:w-full">
+        <TextInput placeholder="Search name, username, email or phone" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       {error && <Notice notice={{ type: 'error', text: error }} />}
@@ -54,65 +52,65 @@ export default function AdminFarmers({ onChanged }) {
       {!farmers ? (
         <p className="text-inksoft text-sm">Loading farmers…</p>
       ) : shown.length === 0 ? (
-        <p className="text-inksoft text-sm">No farmers found.</p>
+        <p className="bg-white rounded-2xl shadow-card p-5 text-sm text-inksoft">No farmers found.</p>
       ) : (
-        <div className="bg-white border border-line rounded-lg shadow-card overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-sage text-inksoft text-xs">
-              <tr>
-                <th className="px-4 py-3">Farmer</th>
-                <th className="px-4 py-3">Contact</th>
-                <th className="px-4 py-3">Farm</th>
-                <th className="px-4 py-3">Loans</th>
-                <th className="px-4 py-3">Balance</th>
-                <th className="px-4 py-3">Joined</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shown.map(f => {
-                const isAdmin = f.role === 'ADMIN'
-                return (
-                  <tr key={f.farmerId} className="border-t border-line align-top">
-                    <td className="px-4 py-3">
-                      <div className="font-semibold">{f.fullName}</div>
-                      <div className="text-xs text-inksoft">@{f.userName}</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>{f.phoneNumber}</div>
-                      <div className="text-xs text-inksoft">{f.email || '—'}</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>{f.farmLocation || '—'}</div>
-                      <div className="text-xs text-inksoft">{f.farmSizeHectares} ha · {f.historicAverageYieldKg} kg</div>
-                    </td>
-                    <td className="px-4 py-3">{f.loanCount}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{formatMoney(f.balance)}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{formatDate(f.createdAt) || '—'}</td>
-                    <td className="px-4 py-3">
-                      {isAdmin
-                        ? <span className="text-xs font-semibold px-2 py-1 rounded-md bg-gold text-field-deep">Admin</span>
-                        : f.suspended
-                          ? <span className="text-xs font-semibold px-2 py-1 rounded-md bg-err-bg text-err">Suspended</span>
-                          : <span className="text-xs font-semibold px-2 py-1 rounded-md bg-ok-bg text-field-deep">Active</span>}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {!isAdmin && (
-                        <button
-                          disabled={busyId === f.farmerId}
-                          onClick={() => toggleSuspension(f)}
-                          className={'text-sm font-semibold underline disabled:opacity-50 ' + (f.suspended ? 'text-field' : 'text-err')}
-                        >
-                          {busyId === f.farmerId ? 'Working…' : f.suspended ? 'Reinstate' : 'Suspend'}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {shown.map(f => {
+            const isAdmin = f.role === 'ADMIN'
+            const busy = busyId === f.farmerId
+            return (
+              <div key={f.farmerId} className="bg-white rounded-2xl shadow-card p-5 flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Avatar name={f.fullName} />
+                    <div className="min-w-0">
+                      <div className="font-bold truncate">{f.fullName}</div>
+                      <div className="text-xs text-inksoft">@{f.userName} · {f.phoneNumber}</div>
+                    </div>
+                  </div>
+                  {isAdmin
+                    ? <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-field text-white">Admin</span>
+                    : f.suspended
+                      ? <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-err-bg text-err">Suspended</span>
+                      : <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-ok-bg text-field-deep">Active</span>}
+                </div>
+
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="bg-bg rounded-xl py-2.5">
+                    <div className="text-sm font-bold">{f.loanCount}</div>
+                    <div className="text-[11px] text-inksoft">Loans</div>
+                  </div>
+                  <div className="bg-bg rounded-xl py-2.5">
+                    <div className="text-sm font-bold">{f.farmSizeHectares} ha</div>
+                    <div className="text-[11px] text-inksoft">Farm size</div>
+                  </div>
+                  <div className="bg-bg rounded-xl py-2.5">
+                    <div className="text-sm font-bold">{formatMoney(f.balance)}</div>
+                    <div className="text-[11px] text-inksoft">Balance</div>
+                  </div>
+                </div>
+
+                <div className="text-xs text-inksoft">
+                  {f.farmLocation || '—'} · {f.email || 'no email'} · joined {formatDate(f.createdAt) || '—'}
+                </div>
+
+                {!isAdmin && (
+                  <button
+                    disabled={busy}
+                    onClick={() => toggleSuspension(f)}
+                    className={
+                      'disabled:opacity-55 font-semibold text-sm py-2.5 rounded-xl transition-colors ' +
+                      (f.suspended
+                        ? 'bg-field hover:bg-field-deep text-white'
+                        : 'border border-err/40 text-err hover:bg-err-bg')
+                    }
+                  >
+                    {busy ? 'Working…' : f.suspended ? 'Reinstate' : 'Suspend'}
+                  </button>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

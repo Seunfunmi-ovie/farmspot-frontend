@@ -6,7 +6,7 @@ export const formatDate = iso =>
   iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : null
 
 export const STATUS = {
-  PENDING: { label: 'Accepted, awaiting disbursement', tone: 'bg-[#F1E7CF] text-[#6E5424]' },
+  PENDING: { label: 'Awaiting release', tone: 'bg-[#FFF1D6] text-[#8A5A00]' },
   APPROVED: { label: 'Approved', tone: 'bg-ok-bg text-field-deep' },
   REPAYING: { label: 'Repaying', tone: 'bg-ok-bg text-field-deep' },
   FULLY_REPAID: { label: 'Fully repaid', tone: 'bg-sage text-inksoft' },

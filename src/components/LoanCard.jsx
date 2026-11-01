@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TextInput } from './Field.jsx'
 import Notice from './Notice.jsx'
+import { WalletIcon } from './Icons.jsx'
 import { request } from '../api.js'
 import { formatMoney, formatDate, addDays, STATUS, PAYABLE } from '../format.js'
 
@@ -33,21 +34,26 @@ export default function LoanCard({ loan, onChanged }) {
   }
 
   return (
-    <div className="bg-white border border-line rounded-lg shadow-card px-6 py-5">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-xs text-inksoft">Loan #{loan.loanId}{disbursed ? ` · disbursed ${disbursed}` : ''}</div>
-          <div className="font-serif text-2xl mt-0.5">{formatMoney(loan.requestedAmount)}</div>
+    <div className="bg-white rounded-2xl shadow-card p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="w-11 h-11 shrink-0 rounded-xl bg-field-soft text-field flex items-center justify-center">
+            <WalletIcon className="w-5 h-5" />
+          </span>
+          <div className="min-w-0">
+            <div className="text-xs text-inksoft truncate">Loan #{loan.loanId}{disbursed ? ` · ${disbursed}` : ''}</div>
+            <div className="text-xl font-extrabold">{formatMoney(loan.requestedAmount)}</div>
+          </div>
         </div>
-        <span className={'text-xs font-semibold px-2.5 py-1 rounded-md ' + status.tone}>{status.label}</span>
+        <span className={'text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap ' + status.tone}>{status.label}</span>
       </div>
 
       {showProgress && (
         <div className="mt-4">
-          <div className="h-1.5 bg-sage rounded-md overflow-hidden">
-            <div className="h-full bg-field" style={{ width: pct + '%' }} />
+          <div className="h-2 bg-sage rounded-full overflow-hidden">
+            <div className="h-full bg-field rounded-full" style={{ width: pct + '%' }} />
           </div>
-          <div className="text-xs text-inksoft mt-1.5">
+          <div className="text-xs text-inksoft mt-2">
             {formatMoney(loan.amountRepaid)} repaid of {formatMoney(loan.requestedAmount)}
           </div>
         </div>
@@ -72,7 +78,7 @@ export default function LoanCard({ loan, onChanged }) {
       )}
 
       {PAYABLE.includes(loan.status) && !paying && (
-        <button onClick={() => setPaying(true)} className="mt-4 text-sm font-semibold text-field underline">
+        <button onClick={() => setPaying(true)} className="mt-4 w-full bg-field-soft hover:bg-wheat text-field-deep font-bold text-sm py-3 rounded-xl transition-colors">
           Make a payment
         </button>
       )}
@@ -81,16 +87,17 @@ export default function LoanCard({ loan, onChanged }) {
         <form onSubmit={pay} className="mt-4 flex flex-col gap-2">
           <div className="text-xs text-inksoft">
             You owe {formatMoney(owed)}.{' '}
-            <button type="button" onClick={() => setAmount(owed.toFixed(2))} className="underline">Pay in full</button>
- 
+            <button type="button" onClick={() => setAmount(owed.toFixed(2))} className="font-semibold text-field underline">Pay in full</button>
           </div>
           <div className="flex items-center gap-3">
-            <TextInput type="number" step="0.01" required placeholder="Amount" value={amount} onChange={e => setAmount(e.target.value)} />
-            <button disabled={loading} className="bg-field hover:bg-field-deep disabled:opacity-55 text-bg font-semibold text-sm px-4 py-2.5 rounded-md">
+            <div className="grow [&>input]:w-full">
+              <TextInput type="number" step="0.01" required placeholder="Amount" value={amount} onChange={e => setAmount(e.target.value)} />
+            </div>
+            <button disabled={loading} className="bg-field hover:bg-field-deep disabled:opacity-55 text-white font-semibold text-sm px-5 py-3 rounded-xl">
               {loading ? 'Sending…' : 'Pay'}
             </button>
-            <button type="button" onClick={() => { setPaying(false); setError(null) }} className="text-sm text-inksoft underline">Cancel</button>
           </div>
+          <button type="button" onClick={() => { setPaying(false); setError(null) }} className="self-start text-sm text-inksoft underline">Cancel</button>
         </form>
       )}
 

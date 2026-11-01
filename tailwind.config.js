@@ -4,25 +4,25 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Fraunces', 'serif'],
-        sans: ['"Work Sans"', 'sans-serif']
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        serif: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
       },
       colors: {
-        bg: '#F5F1E6',
-        paper: '#FFFEFA',
-        ink: '#262A20',
-        inksoft: '#625F52',
-        field: { DEFAULT: '#3D4A2C', deep: '#2B351F' },
-        gold: '#A8864B',
-        wheat: '#DCC48C',
-        soil: '#7B5638',
-        sage: '#E9E8D8',
-        line: '#DED7C2',
-        err: { DEFAULT: '#9B3E2C', bg: '#F5E6DF' },
-        ok: { bg: '#E7EBD8' }
+        bg: '#F2F6F3',
+        paper: '#FFFFFF',
+        ink: '#14231A',
+        inksoft: '#667A6E',
+        field: { DEFAULT: '#0E8A41', deep: '#096B32', soft: '#E1F3E7' },
+        gold: '#F2A93B',
+        wheat: '#CDEBD8',
+        soil: '#8A6A3F',
+        sage: '#E8F0EA',
+        line: '#E1E9E3',
+        err: { DEFAULT: '#D0453B', bg: '#FDECEA' },
+        ok: { bg: '#E1F3E7' }
       },
       boxShadow: {
-        card: '0 1px 2px rgba(43,53,31,0.06), 0 6px 18px rgba(43,53,31,0.05)'
+        card: '0 1px 2px rgba(20,35,26,0.05), 0 8px 24px rgba(20,35,26,0.06)'
       }
     }
   },

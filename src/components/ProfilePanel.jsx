@@ -14,9 +14,10 @@ const FIELDS = [
 ]
 
 const NUMERIC = ['farmSizeHectares', 'historicAverageYieldKg']
+const EMPTY = Object.fromEntries(FIELDS.map(([key]) => [key, '']))
 
 export default function ProfilePanel({ farmerId, onDone, onCancel }) {
-  const [form, setForm] = useState(Object.fromEntries(FIELDS.map(([key]) => [key, ''])))
+  const [form, setForm] = useState(EMPTY)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -39,13 +40,16 @@ export default function ProfilePanel({ farmerId, onDone, onCancel }) {
     const res = await request('PUT', `/api/farmer/${farmerId}/profile`, body)
     setLoading(false)
     if (!res.ok) return setError({ type: 'error', text: res.message })
+    setForm(EMPTY)
     onDone({ type: 'success', text: res.data?.message || 'Profile updated.' })
   }
 
   return (
-    <form onSubmit={submit} className="bg-white border border-line rounded-lg shadow-card px-8 py-7 mb-6 flex flex-col gap-4">
-      <h3 className="text-lg">Edit your profile</h3>
-      <p className="text-sm text-inksoft -mt-2">Only the fields you fill in will be changed.</p>
+    <form onSubmit={submit} className="bg-white rounded-3xl shadow-card p-6 flex flex-col gap-4">
+      <div>
+        <h3 className="text-lg font-bold">Edit your profile</h3>
+        <p className="text-sm text-inksoft mt-0.5">Only the fields you fill in will be changed.</p>
+      </div>
       <Notice notice={error} />
       {FIELDS.map(([key, label, type]) => (
         <Field key={key} label={label}>
@@ -59,7 +63,7 @@ export default function ProfilePanel({ farmerId, onDone, onCancel }) {
       ))}
       <div className="flex items-center gap-4">
         <SubmitButton loading={loading}>Save changes</SubmitButton>
-        <button type="button" onClick={onCancel} className="text-sm text-inksoft underline mt-1.5">Cancel</button>
+        {onCancel && <button type="button" onClick={onCancel} className="text-sm text-inksoft underline">Cancel</button>}
       </div>
     </form>
   )
